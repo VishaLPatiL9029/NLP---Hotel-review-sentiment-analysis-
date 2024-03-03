@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from src.exception import CustomException
 from src.logger import logging
-
+from sklearn.model_selection import train_test_split
 from src.utils import save_object
 from src.utils import evaluate_model
 
@@ -19,14 +19,12 @@ class ModelTrainer:
     def __init__ (self):
         self.model_trainer_config = ModelTrainerConfig()
 
-    def initiate_model_training(self, train_array, test_array):
+    def initiate_model_training(self, x_train, x_test, y_train, y_test):
         try:
-            logging.info("splitting dependent and independent variables from train and test data")
-            x_train, y_train, y_test, y_train = (train_array[:,:-1], train_array[:,-1], test_array[:,:-1], test_array[:,-1])
+          
+            model = RandomForestClassifier()
 
-            model = {'RandomForestClassifier':RandomForestClassifier()}
-
-            model_report : dict = evaluate_model(x_train, y_train, x_test, y_test, models)
+            model_report = evaluate_model(x_train, x_test, y_train, y_test, model)
 
             print(model_report)
             print('\n====================================================================================\n')
