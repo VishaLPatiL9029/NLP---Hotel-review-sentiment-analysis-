@@ -1,10 +1,11 @@
 from flask import Flask, request, render_template, jsonify
+from src.pipeline.prediction_pipeline import CustomData,PredictPipeline
 
 
 
 
 app = Flask(__name__)
-
+ 
 
 @app.route('/')
 def home_page():
@@ -15,11 +16,14 @@ def predict_datapoint():
     if request.method == 'GET':
         return render_template('form.html')
     else:
-
-
+        data = CustomData(Description = request.form.get('Description'))
+        final_new_data=data.get_data_as_dataframe()
+        predict_pipeline=PredictPipeline()
+        pred=predict_pipeline.predict(final_new_data)
+        results=round(pred[0],2)
         return render_template('result.html', final_result = results)
 
 
 
 if __name__ == "__main__":
-    app.run(host =  '0.0.0.0', debug = True)
+    app.run(host =  '0.0.0.0', debug = False)
